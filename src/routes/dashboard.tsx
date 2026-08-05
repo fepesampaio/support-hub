@@ -31,6 +31,7 @@ import {
   type Priority,
   type Ticket,
 } from "@/lib/tickets";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -81,6 +82,7 @@ function DashboardPage() {
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-muted-foreground sm:inline">{user.email}</span>
+            <ThemeToggle />
             <Button
               variant="outline"
               size="sm"

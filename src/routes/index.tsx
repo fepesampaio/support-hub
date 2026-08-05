@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -74,7 +75,10 @@ function AuthPage() {
         <p className="text-sm text-primary-foreground/60">Central de Chamados · 2026</p>
       </section>
 
-      <section className="flex items-center justify-center px-6 py-16">
+      <section className="relative flex items-center justify-center px-6 py-16">
+        <div className="absolute top-6 right-6">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-sm">
           <div className="mb-8 flex items-center gap-2 text-primary lg:hidden">
             <Headset className="h-6 w-6" />
