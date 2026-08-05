@@ -32,6 +32,7 @@ import {
   type Ticket,
 } from "@/lib/tickets";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -56,13 +57,33 @@ function DashboardPage() {
   const { user, ready, signOut } = useAuth();
   const navigate = useNavigate();
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (ready && !user) navigate({ to: "/", replace: true });
   }, [ready, user, navigate]);
 
-  if (!ready || !user) {
+  useEffect(() => {
+    if (!user) return;
+    async function loadTickets() {
+      try {
+        const { data, error } = await supabase
+          .from("tickets")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        setTickets(data as Ticket[]);
+      } catch (err) {
+        console.error("Erro ao carregar chamados:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadTickets();
+  }, [user]);
+
+  if (!ready || !user || isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
         Carregando…
@@ -71,6 +92,32 @@ function DashboardPage() {
   }
 
   const openCount = tickets.filter((t) => t.status !== "Resolvido").length;
+
+  async function handleCreateTicket(newTicket: Omit<Ticket, "id" | "created_at" | "status">) {
+    try {
+      const { data, error } = await supabase
+        .from("tickets")
+        .insert([
+          {
+            title: newTicket.title,
+            description: newTicket.description,
+            category: newTicket.category,
+            priority: newTicket.priority,
+            status: "Aberto",
+            user_id: user.id,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        setTickets((prev) => [data as Ticket, ...prev]);
+      }
+    } catch (err) {
+      console.error("Erro ao criar chamado:", err);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -204,18 +251,36 @@ function DashboardPage() {
       <NewTicketDialog
         open={open}
         onOpenChange={setOpen}
-        onCreate={(ticket) => setTickets((prev) => [ticket, ...prev])}
+        onCreate={handleCreateTicket}
       />
     </div>
   );
 }
 
-function resolve(id: string, set: React.Dispatch<React.SetStateAction<Ticket[]>>) {
-  set((prev) => prev.map((t) => (t.id === id ? { ...t, status: "Resolvido" } : t)));
+async function resolve(id: string, set: React.Dispatch<React.SetStateAction<Ticket[]>>) {
+  try {
+    const { error } = await supabase
+      .from("tickets")
+      .update({ status: "Resolvido" })
+      .eq("id", id);
+    if (error) throw error;
+    set((prev) => prev.map((t) => (t.id === id ? { ...t, status: "Resolvido" } : t)));
+  } catch (err) {
+    console.error("Erro ao resolver chamado:", err);
+  }
 }
 
-function remove(id: string, set: React.Dispatch<React.SetStateAction<Ticket[]>>) {
-  set((prev) => prev.filter((t) => t.id !== id));
+async function remove(id: string, set: React.Dispatch<React.SetStateAction<Ticket[]>>) {
+  try {
+    const { error } = await supabase
+      .from("tickets")
+      .delete()
+      .eq("id", id);
+    if (error) throw error;
+    set((prev) => prev.filter((t) => t.id !== id));
+  } catch (err) {
+    console.error("Erro ao excluir chamado:", err);
+  }
 }
 
 function Pill({ className, children }: { className?: string; children: React.ReactNode }) {
@@ -269,7 +334,7 @@ function NewTicketDialog({
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  onCreate: (t: Ticket) => void;
+  onCreate: (t: Omit<Ticket, "id" | "created_at" | "status">) => void;
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -284,13 +349,10 @@ function NewTicketDialog({
       return;
     }
     onCreate({
-      id: crypto.randomUUID(),
       title: title.trim(),
       description: description.trim(),
       category,
       priority,
-      status: "Aberto",
-      created_at: new Date().toISOString(),
     });
     setTitle("");
     setDescription("");

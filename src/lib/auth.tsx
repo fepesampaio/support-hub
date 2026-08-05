@@ -1,10 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { supabase } from "./supabase";
 
-/**
- * Mock authentication layer.
- * Swap these functions for Lovable Cloud (Supabase) auth calls when the backend is connected.
- */
-export type AuthUser = { email: string };
+export type AuthUser = { email: string; id: string };
 
 type AuthContextValue = {
   user: AuthUser | null;
@@ -14,8 +11,6 @@ type AuthContextValue = {
   signOut: () => Promise<void>;
 };
 
-const STORAGE_KEY = "helpdesk.session";
-
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -23,28 +18,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setUser(JSON.parse(raw) as AuthUser);
-    } catch {
-      /* ignore */
-    }
-    setReady(true);
+    // Obter sessão inicial
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUser({
+          email: session.user.email ?? "",
+          id: session.user.id,
+        });
+      }
+      setReady(true);
+    });
+
+    // Escutar mudanças de estado de autenticação
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser({
+          email: session.user.email ?? "",
+          id: session.user.id,
+        });
+      } else {
+        setUser(null);
+      }
+      setReady(true);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const value = useMemo<AuthContextValue>(() => {
-    const persist = (next: AuthUser | null) => {
-      setUser(next);
-      if (next) localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      else localStorage.removeItem(STORAGE_KEY);
-    };
-
     return {
       user,
       ready,
-      signIn: async (email) => persist({ email }),
-      signUp: async (email) => persist({ email }),
-      signOut: async () => persist(null),
+      signIn: async (email, password) => {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+      },
+      signUp: async (email, password) => {
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+      },
+      signOut: async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+      },
     };
   }, [user, ready]);
 
