@@ -49,8 +49,9 @@ function AuthPage() {
       if (mode === "login") await signIn(email, password);
       else await signUp(email, password);
       navigate({ to: "/dashboard", replace: true });
-    } catch {
-      setError("Não foi possível continuar. Tente novamente.");
+    } catch (err: any) {
+      console.error("Erro na autenticação:", err);
+      setError(err?.message || "Não foi possível continuar. Tente novamente.");
     } finally {
       setLoading(false);
     }

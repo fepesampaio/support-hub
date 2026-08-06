@@ -7,4 +7,6 @@ if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KE
   console.warn("Supabase credentials missing. Make sure to define VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local");
 }
 
+console.log("Supabase URL client-side:", supabaseUrl);
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
