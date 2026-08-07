@@ -104,7 +104,7 @@ function DashboardPage() {
             category: newTicket.category,
             priority: newTicket.priority,
             status: "Aberto",
-            user_id: user.id,
+            user_id: user?.id,
           },
         ])
         .select()
