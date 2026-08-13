@@ -37,13 +37,13 @@ import { supabase } from "@/lib/supabase";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Meus chamados — Central de Chamados HelpDesk — Sistema de Suporte" },
+      { title: "Meus chamados — Central de Chamados HelpDesk" },
       {
         name: "description",
         content:
           "Painel de chamados para abrir, acompanhar prioridade e status, resolver e excluir solicitações de suporte técnico, financeiro e geral.",
       },
-      { property: "og:title", content: "Meus chamados — Central de Chamados HelpDesk — Sistema de Suporte" },
+      { property: "og:title", content: "Meus chamados — Central de Chamados HelpDesk" },
       {
         property: "og:description",
         content:
