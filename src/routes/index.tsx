@@ -10,16 +10,17 @@ import { ThemeToggle } from "@/components/theme-toggle";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Entrar — Central de Chamados HelpDesk" },
+      { title: "Entrar — Central de Chamados HelpDesk — Sistema de Suporte" },
       {
         name: "description",
         content:
-          "Acesse a Central de Chamados para abrir, acompanhar e resolver solicitações de suporte técnico, financeiro e geral.",
+          "Faça login na Central de Chamados para abrir, acompanhar e resolver chamados de suporte técnico, financeiro e geral.",
       },
-      { property: "og:title", content: "Entrar — Central de Chamados HelpDesk" },
+      { property: "og:title", content: "Entrar — Central de Chamados HelpDesk — Sistema de Suporte" },
       {
         property: "og:description",
-        content: "Abra e acompanhe seus chamados de suporte em um painel moderno e simples.",
+        content:
+          "Faça login na Central de Chamados para abrir, acompanhar e resolver chamados de suporte técnico, financeiro e geral.",
       },
     ],
   }),

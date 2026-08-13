@@ -79,15 +79,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Central de Chamados HelpDesk" },
+      { title: "Central de Chamados HelpDesk — Sistema de Suporte Técnico" },
       {
         name: "description",
-        content: "Sistema de abertura e acompanhamento de chamados de suporte.",
+        content:
+          "Sistema de suporte para abertura, acompanhamento e resolução de chamados técnicos, financeiros e gerais.",
       },
-      { property: "og:title", content: "Central de Chamados HelpDesk" },
+      { property: "og:title", content: "Central de Chamados HelpDesk — Sistema de Suporte Técnico" },
       {
         property: "og:description",
-        content: "Sistema de abertura e acompanhamento de chamados de suporte.",
+        content:
+          "Sistema de suporte para abertura, acompanhamento e resolução de chamados técnicos, financeiros e gerais.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
