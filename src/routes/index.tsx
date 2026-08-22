@@ -60,7 +60,7 @@ function AuthPage() {
 
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
-      <div className="hidden">Teste</div>
+      <div className="hidden">Crie um tema de alto contraste.</div>
       <section className="hidden flex-col justify-between bg-primary p-12 text-primary-foreground lg:flex">
         <div className="flex items-center gap-2 text-lg font-semibold">
           <Headset className="h-6 w-6" />
