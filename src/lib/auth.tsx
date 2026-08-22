@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { supabase } from "./supabase";
 
 export type AuthUser = { email: string; id: string };
 
@@ -13,55 +12,44 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+const MOCK_STORAGE_KEY = "helpdesk_mock_auth";
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Obter sessão inicial
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser({
-          email: session.user.email ?? "",
-          id: session.user.id,
-        });
+    // Carregar usuário mockado do localStorage
+    const saved = localStorage.getItem(MOCK_STORAGE_KEY);
+    if (saved) {
+      try {
+        setUser(JSON.parse(saved));
+      } catch (e) {
+        localStorage.removeItem(MOCK_STORAGE_KEY);
       }
-      setReady(true);
-    });
-
-    // Escutar mudanças de estado de autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        setUser({
-          email: session.user.email ?? "",
-          id: session.user.id,
-        });
-      } else {
-        setUser(null);
-      }
-      setReady(true);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    }
+    setReady(true);
   }, []);
 
   const value = useMemo<AuthContextValue>(() => {
     return {
       user,
       ready,
-      signIn: async (email, password) => {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+      signIn: async (email, _password) => {
+        // Mock login: qualquer e-mail/senha funciona
+        const mockUser = { email, id: "mock-id-" + Date.now() };
+        setUser(mockUser);
+        localStorage.setItem(MOCK_STORAGE_KEY, JSON.stringify(mockUser));
       },
-      signUp: async (email, password) => {
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
+      signUp: async (email, _password) => {
+        // Mock signup
+        const mockUser = { email, id: "mock-id-" + Date.now() };
+        setUser(mockUser);
+        localStorage.setItem(MOCK_STORAGE_KEY, JSON.stringify(mockUser));
       },
       signOut: async () => {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
+        setUser(null);
+        localStorage.removeItem(MOCK_STORAGE_KEY);
       },
     };
   }, [user, ready]);
