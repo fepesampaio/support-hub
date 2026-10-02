@@ -1,4 +1,4 @@
-# Support Hub
+# HelpDesk FreeLovable
 
 Crie uma aplicação web moderna e limpa de um sistema de "HelpDesk / Chamados de Suporte" com suporte a autenticação de usuários.
 
