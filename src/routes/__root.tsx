@@ -79,13 +79,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Central de Chamados HelpDesk — Sistema de Suporte Técnico" },
+      { title: "Central de Chamados HelpDesk FreeLovable — Sistema de Suporte Técnico" },
       {
         name: "description",
         content:
           "Sistema de suporte para abertura, acompanhamento e resolução de chamados técnicos, financeiros e gerais.",
       },
-      { property: "og:title", content: "Central de Chamados HelpDesk — Sistema de Suporte Técnico" },
+      { property: "og:title", content: "Central de Chamados HelpDesk FreeLovable — Sistema de Suporte Técnico" },
       {
         property: "og:description",
         content:

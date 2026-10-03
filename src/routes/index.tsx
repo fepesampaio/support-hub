@@ -10,13 +10,13 @@ import { ThemeToggle } from "@/components/theme-toggle";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Entrar — Central de Chamados HelpDesk — Sistema de Suporte" },
+      { title: "Entrar — Central de Chamados HelpDesk FreeLovable — Sistema de Suporte" },
       {
         name: "description",
         content:
           "Faça login na Central de Chamados para abrir, acompanhar e resolver chamados de suporte técnico, financeiro e geral.",
       },
-      { property: "og:title", content: "Entrar — Central de Chamados HelpDesk — Sistema de Suporte" },
+      { property: "og:title", content: "Entrar — Central de Chamados HelpDesk FreeLovable — Sistema de Suporte" },
       {
         property: "og:description",
         content:
@@ -64,7 +64,7 @@ function AuthPage() {
       <section className="hidden flex-col justify-between bg-primary p-12 text-primary-foreground lg:flex">
         <div className="flex items-center gap-2 text-lg font-semibold">
           <Headset className="h-6 w-6" />
-          HelpDesk
+          HelpDesk FreeLovable
         </div>
         <div className="max-w-md space-y-4">
           <h2 className="text-4xl font-semibold leading-tight">
@@ -85,7 +85,7 @@ function AuthPage() {
         <div className="w-full max-w-sm">
           <div className="mb-8 flex items-center gap-2 text-primary lg:hidden">
             <Headset className="h-6 w-6" />
-            <span className="text-lg font-semibold">HelpDesk</span>
+            <span className="text-lg font-semibold">HelpDesk FreeLovable</span>
           </div>
           <h1 className="text-2xl font-semibold tracking-tight">
             {mode === "login" ? "Entrar na sua conta" : "Criar uma conta"}

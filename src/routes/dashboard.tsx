@@ -37,13 +37,13 @@ import { supabase } from "@/lib/supabase";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Meus chamados — Central de Chamados HelpDesk" },
+      { title: "Chamados FreeLovable — Central de Chamados HelpDesk FreeLovable" },
       {
         name: "description",
         content:
           "Painel de chamados para abrir, acompanhar prioridade e status, resolver e excluir solicitações de suporte técnico, financeiro e geral.",
       },
-      { property: "og:title", content: "Meus chamados — Central de Chamados HelpDesk" },
+      { property: "og:title", content: "Chamados FreeLovable — Central de Chamados HelpDesk FreeLovable" },
       {
         property: "og:description",
         content:
@@ -126,7 +126,7 @@ function DashboardPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-2 font-semibold text-primary">
             <Headset className="h-5 w-5" />
-            <span>HelpDesk</span>
+            <span>HelpDesk FreeLovable</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-muted-foreground sm:inline">{user.email}</span>
@@ -149,7 +149,7 @@ function DashboardPage() {
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Meus chamados</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Chamados FreeLovable</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {tickets.length === 0
                 ? "Nenhum chamado registrado até o momento."
